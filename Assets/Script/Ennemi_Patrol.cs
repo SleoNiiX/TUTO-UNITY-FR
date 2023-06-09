@@ -5,6 +5,8 @@ public class Ennemi_Patrol : MonoBehaviour
     public float speed;
     public Transform[] waypoints;
 
+    public int damageOnCollision = 20;
+
     public SpriteRenderer graphics;
 
     private Transform target;
@@ -30,7 +32,10 @@ public class Ennemi_Patrol : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-            
-        //Commentaire pour tester les commits
+        if (collision.transform.CompareTag("Player"))
+        {
+            PlayerHealth playerHealth = collision.transform.GetComponent<PlayerHealth>();
+            playerHealth.TakeDamage(damageOnCollision);
+        }
     }
 }
