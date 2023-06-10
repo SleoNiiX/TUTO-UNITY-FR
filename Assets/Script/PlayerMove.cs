@@ -17,27 +17,28 @@ public class PlayerMove : MonoBehaviour
     public SpriteRenderer spriteRenderer;
 
     private Vector3 velocity = Vector3.zero;
+    private float horizontalMovement;
 
     void Update()
     {
+        isGrounded = Physics2D.OverlapArea(GroundCheckLeft.position, GroundCheckRight.position);
+
+        horizontalMovement = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
+
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             isJumping = true;
         }
-    }
-    
-    void FixedUpdate()
-    {
-        isGrounded = Physics2D.OverlapArea(GroundCheckLeft.position, GroundCheckRight.position);
-
-        float horizontalMovement = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
-
-        MovePlayer(horizontalMovement);
 
         Flip(rb.velocity.x);
 
         float characterVelocity = Mathf.Abs(rb.velocity.x);
         animator.SetFloat("speed", characterVelocity);
+    }
+    
+    void FixedUpdate()
+    {
+        MovePlayer(horizontalMovement);
     }
 
     void MovePlayer(float _horizontalMovement)
