@@ -9,8 +9,9 @@ public class PlayerMove : MonoBehaviour
     private bool isJumping;
     private bool isGrounded;
 
-    public Transform GroundCheckLeft;
-    public Transform GroundCheckRight;
+    public Transform groundCheck;
+    public float groundCheckRadius;
+    public LayerMask collisionLayers;
 
     public Rigidbody2D rb;
     public Animator animator;
@@ -21,7 +22,7 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
-        isGrounded = Physics2D.OverlapArea(GroundCheckLeft.position, GroundCheckRight.position);
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, collisionLayers);
 
         horizontalMovement = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
 
@@ -62,6 +63,12 @@ public class PlayerMove : MonoBehaviour
         {
             spriteRenderer.flipX = true;
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
     }
 
 }
